@@ -1,0 +1,14 @@
+black
+cvxpy
+gurobipy
+gymnasium
+ipykernel
+lark
+matplotlib
+numpy
+pygame
+pytest
+pyyaml
+scipy
+torch
+tqdm

@@ -58,7 +58,7 @@ class DoubleIntLyapunovControllerTrainer:
         desired_distance: float = 5.0,
         distance_safety_margin: float = 2.0,
         far_distance_margin: float = 3.0,
-        num_vehicles_start: int = 1,
+        num_vehicles_start: int = 1, #michael:1 
         num_vehicles_end: int = 3,
         error_bounds_lower: float = 0.1,
         error_bounds_upper: float = 2.0,
@@ -182,7 +182,7 @@ class DoubleIntLyapunovControllerTrainer:
                 lyap_opt = torch.optim.SGD(self.lyap.parameters(), lr=self.llr)
                 print(f"\nTraining for {n_vehs} vehicles...\n")
                 # initialize platooning environment
-                d_des_list = [0] + [self.d_des] * n_vehs
+                d_des_list = [0] + [self.d_des] * (n_vehs-1) # michael: n_vehs sadece
                 self.env_args["desired distance"] = d_des_list
                 self.error_bounds, self.max_error_bounds = self.update_error_bounds(
                     n_vehs, d_des_list
@@ -310,12 +310,21 @@ class DoubleIntLyapunovControllerTrainer:
                                     prev_error_bounds=self.error_bounds,
                                 )
                             )
+                        #added to save .pt models
+                        print('damla = buradayim')
+                        torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                        torch.save(best_lyap.state_dict(), self.lyap_file)
+                        self.save_loss_plot(n_vehs)
+
 
                     else:
                         self.ploss = None
                         self.dloss = None
                         best_ctrl = copy.deepcopy(self.ctrl)
                         best_lyap = copy.deepcopy(self.lyap)
+                        torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                        torch.save(best_lyap.state_dict(), self.lyap_file)
+                        self.save_loss_plot(n_vehs)
 
         except KeyboardInterrupt:
             env.close()

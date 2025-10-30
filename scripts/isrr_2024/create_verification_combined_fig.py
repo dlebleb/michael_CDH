@@ -18,7 +18,7 @@ scatter_size = 6
 plt.rcParams["font.family"] = "Times New Roman"
 
 if __name__ == "__main__":
-    save_dir = os.path.join(get_project_root(), "scripts", "iros_2024")
+    save_dir = os.path.join(get_project_root(), "scripts", "iros_2024", "data")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     n_vehs = [2, 3]
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     fig.subplots_adjust(0.175, 0.21, 0.98, 0.88, 0.2, 0.2)
     for k, n in enumerate(n_vehs):
         data_file = os.path.join(save_dir, f"verification_losses_{n}.csv")
-        data = np.loadtxt(data_file)
+        data = np.loadtxt(data_file,max_rows = 150)#max_rows = 150 ekledim.
         ax.plot(
             data[:, 1],
             label=f"positivity, N={n}",
