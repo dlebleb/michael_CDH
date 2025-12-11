@@ -286,50 +286,50 @@ class DoubleIntLyapunovControllerTrainer:
                             print("collided")
                         veh_states = copy.deepcopy(env_info["vehicle states"])
 
-                    if (ep_num + 1) % self.cf == 0:
-                        self.ploss, self.dloss, self.perr, self.derr = self.eval_lyap()
-                        self.eval_eps.append(ep_num + 1)
-                        self.pos_losses.append(self.ploss)
-                        self.dec_losses.append(self.dloss)
-                        if self.ploss < min_ploss and self.dloss < min_dloss:
-                            best_ctrl = copy.deepcopy(self.ctrl)
-                            best_lyap = copy.deepcopy(self.lyap)
-                        min_ploss = min(min_ploss, self.ploss)
-                        min_dloss = min(min_dloss, self.dloss)
-                        if self.ploss < 1e-5 and self.dloss < 3e-5:
-                            if np.allclose(self.error_bounds, self.max_error_bounds):
-                                torch.save(best_ctrl.state_dict(), self.ctrl_file)
-                                torch.save(best_lyap.state_dict(), self.lyap_file)
-                                self.save_loss_plot(n_vehs)
-                                break
-                            print("Increasing error bounds to:\n", self.error_bounds)
-                            self.error_bounds, self.max_error_bounds = (
-                                self.update_error_bounds(
-                                    n_vehs,
-                                    d_des_list,
-                                    prev_error_bounds=self.error_bounds,
-                                )
-                            )
-                        #added to save .pt models
-                        print('damla = buradayim')
-                        torch.save(best_ctrl.state_dict(), self.ctrl_file)
-                        torch.save(best_lyap.state_dict(), self.lyap_file)
-                        self.save_loss_plot(n_vehs)
+                    # if (ep_num + 1) % self.cf == 0:
+                    #     self.ploss, self.dloss, self.perr, self.derr = self.eval_lyap()
+                    #     self.eval_eps.append(ep_num + 1)
+                    #     self.pos_losses.append(self.ploss)
+                    #     self.dec_losses.append(self.dloss)
+                    #     if self.ploss < min_ploss and self.dloss < min_dloss:
+                    #         best_ctrl = copy.deepcopy(self.ctrl)
+                    #         best_lyap = copy.deepcopy(self.lyap)
+                    #     min_ploss = min(min_ploss, self.ploss)
+                    #     min_dloss = min(min_dloss, self.dloss)
+                    #     if self.ploss < 1e-5 and self.dloss < 3e-5:
+                    #         if np.allclose(self.error_bounds, self.max_error_bounds):
+                    #             torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                    #             torch.save(best_lyap.state_dict(), self.lyap_file)
+                    #             self.save_loss_plot(n_vehs)
+                    #             break
+                    #         print("Increasing error bounds to:\n", self.error_bounds)
+                    #         self.error_bounds, self.max_error_bounds = (
+                    #             self.update_error_bounds(
+                    #                 n_vehs,
+                    #                 d_des_list,
+                    #                 prev_error_bounds=self.error_bounds,
+                    #             )
+                    #         )
+                    #     #added to save .pt models
+                    #     print('damla = buradayim')
+                    #     torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                    #     torch.save(best_lyap.state_dict(), self.lyap_file)
+                    #     self.save_loss_plot(n_vehs)
 
 
-                    else:
-                        self.ploss = None
-                        self.dloss = None
-                        best_ctrl = copy.deepcopy(self.ctrl)
-                        best_lyap = copy.deepcopy(self.lyap)
-                        torch.save(best_ctrl.state_dict(), self.ctrl_file)
-                        torch.save(best_lyap.state_dict(), self.lyap_file)
-                        self.save_loss_plot(n_vehs)
+                    # else:
+                    #     self.ploss = None
+                    #     self.dloss = None
+                    #     best_ctrl = copy.deepcopy(self.ctrl)
+                    #     best_lyap = copy.deepcopy(self.lyap)
+                    #     torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                    #     torch.save(best_lyap.state_dict(), self.lyap_file)
+                    #     self.save_loss_plot(n_vehs)
                 
-                # print('damla  == buradayim')
-                # torch.save(best_ctrl.state_dict(), self.ctrl_file)
-                # torch.save(best_lyap.state_dict(), self.lyap_file)
-                # self.save_loss_plot(n_vehs)
+                print('damla  == buradayim')
+                torch.save(best_ctrl.state_dict(), self.ctrl_file)
+                torch.save(best_lyap.state_dict(), self.lyap_file)
+                self.save_loss_plot(n_vehs)
        
        
         except KeyboardInterrupt:
